@@ -20,15 +20,6 @@ word = word.lower()
 # guessing mechanisim
 word = list(word)
 print(f"The word is {str(len(word))} letters long")
-# print("The word is " + str(len(word)) + " letters long")
-# if len(word) == 4:
-#     print("The word is 4 letters long")
-# if len(word) == 5:
-#     print("The word is 5 letters long")
-# if len(word) == 6:
-#     print("The word is 6 letters long")
-# if len(word) == 7:
-#     print("The word is 7 letters long")
 usersguesses = ""
 user_guess1 = input("Guess the letter 10 atempts remaining: ")
 if user_guess1 in word:

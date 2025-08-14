@@ -1,0 +1,120 @@
+import json
+import os
+filename = 'contacts.json'
+contacts = []
+if os.path.exists(filename):
+    try:
+        with open(filename, 'r') as json_file:
+            contacts = json.load(json_file)
+            print(f"Loaded {len(contacts)} contacts from {filename}")
+    except json.JSONDecodeError:
+        print(f"{filename} is empty or corrupted. Starting with empty contacts.")
+else:
+    print(f"No existing {filename} found. Starting fresh.")
+def delete() :
+    delete = input("ARE YOU SURE YOU WANT TO DELETE FROM CONTACTS(y/n).").lower()
+    if delete == "y":
+        contacts.remove(c)  # remove the contact
+        print(f"{c['name']} has been deleted.")
+    elif delete == "n" :
+        print("contact not deleted")
+    else :
+        print("please enter a valid input")
+
+while True:
+    # Show menu
+    print("\n--- CONTACTS APP ---")
+    print("1. Add Contact")
+    print("2. View Contacts")
+    print("3. Search Contact")
+    print("4. Delete Contacts")
+    print("5. Exit")
+    
+    choice = input("Enter your choice (1-5): ")
+    
+    if choice == "1":
+        # Adding contacts
+        name = input("Enter name: ")
+        phone = input("Enter phone: ")
+        email = input("Enter email: ")
+        contact = {"name": name, "phone": phone, "email": email}
+        if contact in contacts:
+            print(f"{name} already in contacts, failed to add.")
+        else:
+            contacts.append(contact)
+            print(f"{name} added successfully.")
+            
+    elif choice == "2":
+        # Viewing contacts
+        if not contacts:
+            print("No contacts yet.")
+        else:
+            print("\n--- ALL CONTACTS ---")
+            for idx, c in enumerate(contacts, start=1):
+                print(f"{idx}. NAME: {c['name']}, PHONE: {c['phone']}, EMAIL: {c['email']}")
+                
+    elif choice == "3":
+        # Searchs
+        search_by = input("Do you want to search by name or number? ").lower()
+        if search_by == "name":
+            search_name = input("Enter name of contact: ").lower()
+            found = False
+            for c in contacts:
+                if c['name'].lower() == search_name:
+                    print(f"Found: NAME: {c['name']}, PHONE: {c['phone']}, EMAIL: {c['email']}")
+                    found = True
+            if not found:
+                print("No contact found with that name.")
+                
+        elif search_by == "number":
+            search_phone = input("Enter phone number of contact: ")
+            found = False
+            for c in contacts:
+                if c['phone'] == search_phone:
+                    print(f"Found: NAME: {c['name']}, PHONE: {c['phone']}, EMAIL: {c['email']}")
+                    found = True
+            if not found:
+                print("No contact found with that phone number.")
+        else:
+            print("Invalid search option. Choose 'name' or 'number'.")
+    elif choice == "4" :
+        search_by = input("Do you want to search to delete the contact by name or number: ").lower()
+        if search_by == "name":
+            search_name = input("Enter name of contact: ").lower()
+            found = False
+            for c in contacts:
+                if c['name'].lower() == search_name:
+                    print(f"Found: NAME: {c['name']}, PHONE: {c['phone']}, EMAIL: {c['email']}")
+                    found = True
+                    delete()
+            if not found:
+                print("No contact found with that name.")
+                
+        elif search_by == "number":
+            search_phone = input("Enter phone number of contact: ")
+            found = False
+            for c in contacts:
+                if c['phone'] == search_phone:
+                    print(f"Found: NAME: {c['name']}, PHONE: {c['phone']}, EMAIL: {c['email']}")
+                    found = True
+                    delete()
+            if not found:
+                print("No contact found with that phone number.")
+        else:
+            print("Invalid search option. Choose 'name' or 'number'.")
+            continue
+        
+        
+            
+    elif choice == "5":
+        try:
+            with open(filename, 'w') as json_file:
+                json.dump(contacts, json_file)
+            print(f"Data successfully written to {filename}")
+        except IOError as e:
+            print(f"Error writing to file: {e}")
+        print("Exiting...")
+        break
+        
+    else:
+        print("Invalid choice, try again.")
