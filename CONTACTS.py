@@ -1,5 +1,6 @@
 import json
 import os
+import difflib
 filename = 'contacts.json'
 contacts = []
 if os.path.exists(filename):
@@ -10,19 +11,32 @@ if os.path.exists(filename):
     except json.JSONDecodeError:
         print(f"{filename} is empty or corrupted. Starting with empty contacts.")
 else:
-    print(f"No existing {filename} found. Starting fresh.")
-def delete() :
+    print(f"No existing {filename} found. Starting fresh.")    
+
+def delete():
     delete = input("ARE YOU SURE YOU WANT TO DELETE FROM CONTACTS(y/n).").lower()
     if delete == "y":
-        contacts.remove(c)  # remove the contact
+        contacts.remove(c)
         print(f"{c['name']} has been deleted.")
-    elif delete == "n" :
+    elif delete == "n":
         print("contact not deleted")
-    else :
+    else:
         print("please enter a valid input")
 
+def edit_contact(c):
+    new_name = input(f"Enter new name (current: {c['name']}): ")
+    new_phone = input(f"Enter new phone (current: {c['phone']}): ")
+    new_email = input(f"Enter new email (current: {c['email']}): ")
+
+    if new_name:
+        c['name'] = new_name
+    if new_phone:
+        c['phone'] = new_phone
+    if new_email:
+        c['email'] = new_email
+    print("Contact updated successfully!")
+
 while True:
-    # Show menu
     print("\n--- CONTACTS APP ---")
     print("1. Add Contact")
     print("2. View Contacts")
@@ -33,7 +47,6 @@ while True:
     choice = input("Enter your choice (1-5): ")
     
     if choice == "1":
-        # Adding contacts
         name = input("Enter name: ")
         phone = input("Enter phone: ")
         email = input("Enter email: ")
@@ -45,23 +58,23 @@ while True:
             print(f"{name} added successfully.")
             
     elif choice == "2":
-        # Viewing contacts
         if not contacts:
             print("No contacts yet.")
         else:
             print("\n--- ALL CONTACTS ---")
             for idx, c in enumerate(contacts, start=1):
-                print(f"{idx}. NAME: {c['name']}, PHONE: {c['phone']}, EMAIL: {c['email']}")
-                
+                print(f"{idx}. NAME: {c['name']}, PHONE: {c['phone']}, EMAIL: {c['email']}")           
     elif choice == "3":
-        # Searchs
         search_by = input("Do you want to search by name or number? ").lower()
         if search_by == "name":
             search_name = input("Enter name of contact: ").lower()
             found = False
             for c in contacts:
-                if c['name'].lower() == search_name:
-                    print(f"Found: NAME: {c['name']}, PHONE: {c['phone']}, EMAIL: {c['email']}")
+                if search_name in c['name'].lower() or difflib.SequenceMatcher(None, search_name, c['name'].lower()).ratio() > 0.6:
+                    print(f"Closest Match/Match: NAME: {c['name']}, PHONE: {c['phone']}, EMAIL: {c['email']}")
+                    edit_choice = input("Do you want to edit this contact? (y/n): ").lower()
+                    if edit_choice == "y":
+                        edit_contact(c)
                     found = True
             if not found:
                 print("No contact found with that name.")
@@ -70,25 +83,26 @@ while True:
             search_phone = input("Enter phone number of contact: ")
             found = False
             for c in contacts:
-                if c['phone'] == search_phone:
+                if search_phone in c['phone']:
                     print(f"Found: NAME: {c['name']}, PHONE: {c['phone']}, EMAIL: {c['email']}")
+                    edit_choice = input("Do you want to edit this contact? (y/n): ").lower()
+                    if edit_choice == "y":
+                        edit_contact(c)
                     found = True
             if not found:
                 print("No contact found with that phone number.")
-        else:
-            print("Invalid search option. Choose 'name' or 'number'.")
-    elif choice == "4" :
-        search_by = input("Do you want to search to delete the contact by name or number: ").lower()
-        if search_by == "name":
-            search_name = input("Enter name of contact: ").lower()
-            found = False
-            for c in contacts:
-                if c['name'].lower() == search_name:
-                    print(f"Found: NAME: {c['name']}, PHONE: {c['phone']}, EMAIL: {c['email']}")
-                    found = True
-                    delete()
-            if not found:
-                print("No contact found with that name.")
+        elif choice == "4":
+            search_by = input("Do you want to search to delete the contact by name or number: ").lower()
+            if search_by == "name":
+                search_name = input("Enter name of contact: ").lower()
+                found = False
+                for c in contacts:
+                    if c['name'].lower() == search_name:
+                        print(f"Found: NAME: {c['name']}, PHONE: {c['phone']}, EMAIL: {c['email']}")
+                        found = True
+                        delete()
+                if not found:
+                    print("No contact found with that name.")
                 
         elif search_by == "number":
             search_phone = input("Enter phone number of contact: ")
@@ -104,8 +118,6 @@ while True:
             print("Invalid search option. Choose 'name' or 'number'.")
             continue
         
-        
-            
     elif choice == "5":
         try:
             with open(filename, 'w') as json_file:
