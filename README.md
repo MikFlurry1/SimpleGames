@@ -14,5 +14,11 @@ These are simple games that are easy to make and perfect for beginners learning 
 3. Run it in your terminal or Python IDE.
 4. Enjoy playing and learning.
 
+## Most Recent Update 
+1. Added email and phone "verification" in `CONTACTS.py`
+2. Added hangman features (eg, not losing limbs when guesses are correct) in `Hangmanv2.py`
+3. Reorganized the GUI in  `CONTACTS.py`
+4. Updated `tictactoev5.py` GUI
+
 ---
 Happy coding!
