@@ -4,15 +4,14 @@ board = [" " for _ in range(9)]
 player_X_name = input("Enter name for Player X: ")
 player_O_name = input("Enter name for Player O: ")
 
-
-# printing the board
+# printing the board with numbers in empty spots
 def print_board():
-    print(f" {board[0]} | {board[1]} | {board[2]} ")
+    display = [str(i + 1) if spot == " " else spot for i, spot in enumerate(board)]
+    print(f" {display[0]} | {display[1]} | {display[2]} ")
     print("---+---+---")
-    print(f" {board[3]} | {board[4]} | {board[5]} ")
+    print(f" {display[3]} | {display[4]} | {display[5]} ")
     print("---+---+---")
-    print(f" {board[6]} | {board[7]} | {board[8]} ")
-
+    print(f" {display[6]} | {display[7]} | {display[8]} ")
 
 # check for a win
 def check_win(player):
@@ -31,15 +30,12 @@ def check_win(player):
             return True
     return False
 
-
 # Main game loop
 player = "X"
 for turn in range(9):
     print_board()
-    # what is the players name
     current_name = player_X_name if player == "X" else player_O_name
 
-    # make sure move is okay
     while True:
         try:
             move = int(input(f"{current_name} ({player}), choose a spot 1-9: ")) - 1
@@ -59,7 +55,6 @@ for turn in range(9):
         print(f"{current_name} ({player}) wins!")
         break
 
-    # Switch player
     player = "O" if player == "X" else "X"
 else:
     print_board()

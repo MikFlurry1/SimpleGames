@@ -7,9 +7,9 @@ with open("words.txt", "r") as file:
     words = text.split()
 
 # randomizing
-word = random.choice(words)
-word = word.lower()
-# guessing mechanisim
+word = random.choice(words).lower()
+
+# guessing mechanism
 hangman = [
     """
               ___________
@@ -18,7 +18,7 @@ hangman = [
               |        -|- 
               |        / \\
               |  
-                """,
+    """,
     """
               ___________
               | /       |
@@ -26,7 +26,7 @@ hangman = [
               |        -|- 
               |        / 
               |  
-                     """,
+    """,
     """
               ___________
               | /       |
@@ -34,7 +34,7 @@ hangman = [
               |        -|- 
               |         
               |  
-                     """,
+    """,
     """
               ___________
               | /       |
@@ -42,7 +42,7 @@ hangman = [
               |         |- 
               |         
               |  
-                     """,
+    """,
     """
               ___________
               | /       |
@@ -50,7 +50,7 @@ hangman = [
               |         |
               |         
               |  
-                     """,
+    """,
     """
               ___________
               | /       |
@@ -58,7 +58,7 @@ hangman = [
               |          
               |        
               |  
-                     """,
+    """,
     """
               ___________
               | /       |
@@ -66,13 +66,13 @@ hangman = [
               | YOU LOST     
               |        
               |  
-                     """,
+    """,
 ]
+
 gussedwords = set()
 attemptnumber = 0
-
-maskedword = ""
 maxattempts = 6
+maskedword = ""
 
 
 def stats():
@@ -86,16 +86,17 @@ def stats():
 
 
 def display():
-    print(f"Word:{maskedword}")
-    print(f"You have {str(maxattempts - attemptnumber)} attempts remaining")
+    print(f"Word: {maskedword}")
+    print(f"You have {maxattempts - attemptnumber} attempts remaining")
     print(hangman[attemptnumber])
 
 
-print(f"The word is {str(len(word))} letters long")
+print(f"The word is {len(word)} letters long")
+
 while attemptnumber < maxattempts and maskedword != word:
     stats()
     display()
-    nextguess = input("Please guess a letter: ")
+    nextguess = input("Please guess a letter: ").lower()
     if not nextguess.isalpha() or len(nextguess) != 1:
         print("Please enter a single letter, not a number or symbol.")
         continue
@@ -103,10 +104,13 @@ while attemptnumber < maxattempts and maskedword != word:
         print(f"You already guessed '{nextguess}'. Try a different letter.")
         continue
     gussedwords.add(nextguess)
-    attemptnumber += 1
+    if nextguess not in word:
+        attemptnumber += 1
+
     stats()
+
 if maskedword == word:
-    print("Congrats you guessed the word")
+    print("Congrats you guessed the word!")
 else:
     print(hangman[6])
-    print(f"The word was {word}, sorry")
+    print(f"The word was '{word}', sorry.")
