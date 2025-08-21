@@ -39,12 +39,16 @@ function App() {
 
       if (jRef.current <= 0) {
         clearInterval(foodInterval);
+        document.getElementsByClassName("App-header")[0].className += " bgswitchifyouloose";
         gameMessage.textContent = "YOU LOST";
         gameMessage.style.display = "block";
+        gameMessage.className += 'gameMessage';
       } else if (jRef.current >= 50 && i >= 50) {
         clearInterval(foodInterval);
+        document.getElementsByClassName("App-header")[0].className += " bgswitch";
         gameMessage.textContent = "YOU WON";
         gameMessage.style.display = "block";
+        gameMessage.className += 'gameMessage-';
       }
     }, 1000);
     return () => {
@@ -74,7 +78,7 @@ function App() {
           alt="SUSHI IMAGE!!!"
           id="sushi"
         />
-        <p id="sushi-text">Click on sushi to feed cat</p>
+        <p id="sushi-text">Click on <span id="sushionly">sushi</span> to feed cat</p>
       </div>
     </div>
   );
